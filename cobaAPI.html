@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <title> DATA DAERAH DI INDONESIA </title>
+</head>
+
+<body class= "bg-info">
+    <div class="container">
+    <h1 class="text-center">DATA DAERAH DI INDONESIA</h1>
+    <br>
+    <h2>Provinsi : <select id="provinsi" class="form-select form-select-lg mb-3"></select></h2>
+    <br>
+    <h2>Kabupaten/kota : <select id="kabupatenkota" class="form-select form-select-lg mb-3"></select></h2>
+    <br>
+    <h2>Kecamatan : <select id="kecamatan" class="form-select form-select-lg mb-3"></select></h2>
+    <br>
+    <h2>Kelurahan : <select id="kelurahan" class="form-select form-select-lg mb-3 "></select></h2>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+        integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            var urlprovinsi = "http://dev.farizdotid.com/api/daerahindonesia/provinsi";
+            $.get(urlprovinsi, function (data, status) {
+                console.log(data);
+                for (i = 0; i < data.provinsi.length; i++) {
+                    var opt = "<option value =" + data.provinsi[i].id + ">" + data.provinsi[i].nama + "</option>";
+                    $("#provinsi").append(opt);
+                }
+            })
+        })
+        $("#provinsi").change(function () {
+            var id_provinsi = $("#provinsi").val();
+            var urlkab = "http://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=" + id_provinsi;
+            $("#kabupatenkota").empty();
+
+            $.get(urlkab, function (data, status) {
+                console.log(data);
+                for (i = 0; i < data.kota_kabupaten.length; i++) {
+                    var opt = "<option value =" + data.kota_kabupaten[i].id + ">" + data.kota_kabupaten[i].nama + "</option>";
+                    $("#kabupatenkota").append(opt);
+                }
+            })
+        })
+        $("#kabupatenkota").change(function () {
+            var id_kota = $("#kabupatenkota").val();
+            var urlcamat = "http://dev.farizdotid.com/api/daerahindonesia/kecamatan?id_kota=" + id_kota;
+            $("#kecamatan").empty();
+
+            $.get(urlcamat, function (data, status) {
+                console.log(data);
+                for (i = 0; i < data.kecamatan.length; i++) {
+                    var opt = "<option value =" + data.kecamatan[i].id + ">" + data.kecamatan[i].nama + "</option>";
+                    $("#kecamatan").append(opt);
+                }
+            })
+        })
+        $("#kecamatan").change(function () {
+            var id_kecamatan = $("#kecamatan").val();
+            var urllurah = "http://dev.farizdotid.com/api/daerahindonesia/kelurahan?id_kecamatan=" + id_kecamatan;
+            $("#kelurahan").empty();
+
+            $.get(urllurah, function (data, status) {
+                console.log(data);
+                for (i = 0; i < data.kelurahan.length; i++) {
+                    var opt = "<option value =" + data.kelurahan[i].id + ">" + data.kelurahan[i].nama + "</option>";
+                    $("#kelurahan").append(opt);
+                }
+            })
+        })
+    </script>
+</body>
+</html>
